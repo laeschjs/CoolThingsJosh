@@ -1,0 +1,40 @@
+
+#titleContainer {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	text-align: center;
+}
+
+#titleContainer .card {
+	display: inline-block;
+	font-size: 100px;
+	margin: 10px;
+	padding: 0 15px;
+	font-family: Times New Roman;
+}
+
+#S {
+	background-color: #4ad254;
+}
+
+#E {
+	background-color: #b15dff;
+}
+
+#T {
+	background-color: #ff4c4c;
+}
+
+#loading {
+	font-size: 25px;
+	font-family: Times New Roman;
+}
+
+#loadingSpan {
+	display: inline-block;
+	margin-right: 15px;
+	margin-top: 9px;
+	vertical-align: top;
+	color: #fdfdfd;
+}

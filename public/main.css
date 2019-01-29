@@ -1,0 +1,12 @@
+/* CSS declarations go here */
+html, body, #root {
+	width: 100%;
+	height: 100%;
+	background-color: #444351;
+	overflow: auto;
+	color: white;
+}
+
+a:hover {
+	cursor: pointer;
+}

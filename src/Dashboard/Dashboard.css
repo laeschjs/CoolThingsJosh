@@ -1,0 +1,152 @@
+
+#dashboardContainer {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	text-align: center;
+}
+
+#resumeCard {
+	color: #fdfdfd;
+	border-color: #fdfdfd;
+}
+
+#resumeCard:hover {
+	background-color: #fdfdfd;
+	color: #3A3942;
+}
+
+#resumeCard.disabled:hover {
+	background-color: #3A3942;
+	color: #fdfdfd;
+	cursor: not-allowed;
+}
+
+#newCard {
+	color: #4ad254;
+	border-color: #4ad254;
+}
+
+#newCard:hover {
+	background-color: #4ad254;
+	color: #3A3942;
+}
+
+@keyframes shrinkJoin {
+	to {
+		height: 42.5%;
+		width: 33.3%;
+		top: 53.75%;
+	}
+	from {
+		width: 83.34%;
+		height: 92.6%;
+		top: 3.74%;
+	}
+}
+
+#joinCard {
+	height: 42.5%;
+	width: 33.3%;
+	top: 53.75%;
+}
+
+.joinCardAnim {
+	animation-name: shrinkJoin;
+	animation-duration: 1s;
+}
+
+.joinCard {
+	color: #ff4c4c;
+	z-index: 1;
+	position: absolute;
+	left: 8.33%;
+	border: 5px solid #ff4c4c;
+	border-radius: 70px;
+}
+
+#joinCard:hover {
+	background-color: #ff4c4c;
+	color: #3A3942;
+	cursor: pointer;
+}
+
+@keyframes growJoin {
+	from {
+		height: 42.5%;
+		width: 33.3%;
+		top: 53.75%;
+	}
+	to {
+		width: 83.34%;
+		height: 92.6%;
+		top: 3.74%;
+	}
+}
+
+#joinCardBig {
+	width: 83.34%;
+	height: 92.6%;
+	top: 3.74%;
+	background-color: #ff4c4c;
+	color: #3A3942;
+	padding: 5%;
+	animation-name: growJoin;
+	animation-duration: 1s;
+}
+
+#joinCardBig > div > * , #joinCardBig > *{
+	font-size: 40px;
+	color: #3A3942;
+	border-color: #3A3942;
+}
+
+#joinCardBig > .icon {
+	position: absolute;
+	left: 7%;
+}
+
+#joinCardBig > div > label {
+	top: -25px;
+}
+
+#joinCardBig > div {
+	margin-top: 49%;
+}
+
+#logoutCard {
+	color: #b15dff;
+	border-color: #b15dff;
+}
+
+#logoutCard:hover {
+	background-color: #b15dff;
+	color: #3A3942;
+}
+
+.myCard {
+	height: 85%;
+	top: 7.5%;
+	background-color: #3A3942;
+	position: relative;
+	border: 5px solid;
+	border-radius: 70px;
+}
+
+.myCard:hover {
+	cursor: pointer;
+}
+
+.myRow {
+	height: 50%;
+	margin: 0px;
+}
+
+.titleSpan {
+	font-size: 48px;
+	top: 40%;
+	position: relative;
+	height: 20%;
+	display: block;
+}

@@ -1,0 +1,25 @@
+.tabs .tab a:hover {
+	border-bottom-color: #ee6e73;
+}
+
+.tabActive {
+	border-bottom: 2px solid;
+}
+
+.tabNotActive {
+	border-bottom: 0px;
+}
+
+@media (min-height: 650px) {
+	.myContainer {
+		margin-top: 25px;
+	}
+}
+/*
+#messageBox {
+	display: none;
+}
+
+#submitSignInUp:hover + #messageBox {
+	display: block;
+}*/
