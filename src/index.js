@@ -14,7 +14,13 @@ try {
 }
 
 var dom = (
-  <h1>You don't have the necessary config file to run this application</h1>
+  <div>
+    <h1>
+      You don't have the necessary config file to run this application.
+      Sorry I didn't want to give you full read/write access to my firebase
+      project :p
+    </h1>
+  </div>
 );
 
 if (showSet) {

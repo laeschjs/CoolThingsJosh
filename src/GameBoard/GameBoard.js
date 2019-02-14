@@ -53,18 +53,24 @@ export default class GameBoard extends Component {
     for (var i = 0; i < 12; i++) {
       check = "";
       if (this.state.selected.indexOf(i) !== -1) {
-        check = (<span className="icon has-text-success">
+        check = (
+          <span className="icon green-text">
             <i className="fas fa-check-circle"></i>
-          </span>);
+          </span>
+        );
       }
-      cols.push(<div key={"col" + i % 4} className="column has-text-centered">
-        {check}
-        <img onClick={this.imgSelected(i)} src={this.state["img" + i]} alt="Game Card" />
-      </div>);
+      cols.push(
+        <div key={"col" + i % 4} className="col s3">
+          {check}
+          <img onClick={this.imgSelected(i)} src={this.state["img" + i]} alt="Game Card" />
+        </div>
+      );
       if (i % 4 === 3) {
-        rows.push(<div key={"row" + (i / 4 + 1)} className="columns is-mobile">
-          {cols}
-        </div>);
+        rows.push(
+          <div key={"row" + (i / 4 + 1)} className="row">
+            {cols}
+          </div>
+        );
         cols = []
       }
     }
