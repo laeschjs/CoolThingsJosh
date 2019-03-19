@@ -7,8 +7,8 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 
 export default class SetGame extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       toRender: "TitleScreen"

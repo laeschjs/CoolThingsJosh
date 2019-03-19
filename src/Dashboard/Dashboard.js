@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import './Dashboard.css';
-import makeDeck from '../DeckCreator.js';
+import { makeDeck } from '../Utilities';
 
 export default class Dashboard extends Component {
   constructor() {
@@ -65,7 +65,11 @@ export default class Dashboard extends Component {
 
   newGame = () => {
     var deck = makeDeck();
-    var board = deck.slice(0,12);
+    var boardArr = deck.slice(0,12);
+    var board = {};
+    for (var i = 0; i < boardArr.length; i++) {
+      board["img" + i] = boardArr[i];
+    }
     this.props.db.collection("games").add({
       state: "Waiting",
       queue: [],
