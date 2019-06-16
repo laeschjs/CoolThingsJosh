@@ -19,7 +19,7 @@ export default class SetGame extends Component {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
-        var userRef = this.props.db.collection("users").doc(user.uid);
+        var userRef = this.props.db.doc("users/" + user.uid);
         userRef.get().then(function(userDoc) {
           this.setState({
             toRender: "Dashboard",
@@ -38,12 +38,12 @@ export default class SetGame extends Component {
     var rendered = <TitleScreen message="Loading" />;
     if (this.state.toRender === "Dashboard") {
       rendered = <Dashboard changeView={this.changeToRender} db={this.props.db}
-                            uid={this.state.uid} gameId={this.state.gameId}
-                            setGameId={this.setGameId} />;
+                            gameId={this.state.gameId} setGameId={this.setGameId} />;
     } else if (this.state.toRender === "SignInUp") {
       rendered = <SignInUp db={this.props.db} />;
     } else if (this.state.toRender === "GameBoard") {
-      rendered = <GameBoard db={this.props.db} uid={this.state.uid} />;
+      rendered = <GameBoard db={this.props.db} uid={this.state.uid} 
+                      changeView={function() { return this.changeToRender("Dashboard")}.bind(this)} />;
     }
     return rendered;
   }
@@ -51,6 +51,8 @@ export default class SetGame extends Component {
   setGameId = (newId) => {
     var obj = {};
     obj.gameId = newId;
+    obj.toRender = "GameBoard";
+    this.props.db.doc("users/" + this.state.uid).update({currentGame: newId});
     this.setState(obj);
   }
 

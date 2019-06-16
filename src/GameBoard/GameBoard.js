@@ -48,6 +48,10 @@ export default class GameBoard extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // (maybe) TODO: Check if the game is over
+    // if (this.state.urls["img11"] === "") {
+    //   this.props.changeView()
+    // }
     // Check if there was actually an update
     if (prevState.nextCard === this.state.nextCard) {
       return;
@@ -63,14 +67,15 @@ export default class GameBoard extends Component {
   }
 
   render() {
-    var props = {
+    var passedProps = {
       selected: this.state.selected,
       imgSelected: this.imgSelected,
       gameId: this.state.gameId,
       checkForSet: this.checkSet,
+      changeView: this.props.changeView,
       ...this.state.urls
     }
-    return <GameBoardView {...props} />
+    return <GameBoardView {...passedProps} />
   }
 
   getImage = (index) => {
@@ -123,7 +128,6 @@ export default class GameBoard extends Component {
   gameListener = (gameSnapshot) => {
     var newBoard = gameSnapshot.get("board");
     var nextCard = gameSnapshot.get("nextCard");
-    console.log(newBoard);
     // Check if there was actually an update
     if (nextCard === this.state.nextCard) {
       return;

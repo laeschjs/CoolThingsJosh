@@ -13,6 +13,18 @@ export default class Dashboard extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    var newId = this.state.enteredGameId;
+    if ((newId !== "") && (prevState.enteredGameId !== newId)) {
+      this.props.db.doc("games/" + newId).get().then(function(docSnapshot){
+        if (docSnapshot.exists) {
+          // Update the DB and go to the game
+          this.props.setGameId(newId);
+        } 
+      }.bind(this));
+    }
+  }
+
   render() {
     var isDisabled = "disabled";
     var resumeClick = "";
@@ -79,15 +91,6 @@ export default class Dashboard extends Component {
     })
     .then(function(docRef) {
       this.props.setGameId(docRef.id);
-      this.props.db.collection("users").doc(this.props.uid).set({
-        currentGame: docRef.id
-      }, {merge: true})
-      .then(function() {
-        this.props.changeView("GameBoard");
-      }.bind(this))
-      .catch(function(error) {
-        alert("There was an error");
-      })
     }.bind(this))
     .catch(function(error) {
       console.log("Error adding document: ", error);
@@ -112,8 +115,9 @@ export default class Dashboard extends Component {
   }
 
   changeGameId = (e) => {
+    var newId = e.target.value;
     var obj = {};
-    obj.enteredGameId = e.target.value;
+    obj.enteredGameId = newId;
     this.setState(obj);
   }
 }

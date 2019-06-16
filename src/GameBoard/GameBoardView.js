@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import TitleScreen from '../TitleScreen/TitleScreen';
 
 export default class GameBoardView extends Component {
   render() {
-    if (this.props.img11 === "") {
-      // TODO this should probably be a link to Dashboard?
-      return <TitleScreen message="Creating your Game" />
-    }
     var rows = [];
     var cols = [];
     var check = "";
@@ -44,7 +39,8 @@ export default class GameBoardView extends Component {
         {rows}<br />
         <div className="center-align">
           {checkSet}<br />
-          GameId:&nbsp;{this.props.gameId}
+          GameId:&nbsp;{this.props.gameId}<br />
+          <button onClick={this.props.changeView}>Back to Dashboard</button>
         </div>
       </div>
     )

@@ -97,7 +97,7 @@
 }
 
 #joinCardBig > div > * , #joinCardBig > *{
-	font-size: 40px;
+	font-size: 50px;
 	color: #3A3942;
 	border-color: #3A3942;
 }
@@ -112,7 +112,7 @@
 }
 
 #joinCardBig > div {
-	margin-top: 49%;
+	margin-top: 25%;
 }
 
 #logoutCard {
