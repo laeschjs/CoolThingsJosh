@@ -32,7 +32,8 @@ export default class GameBoard extends Component {
           board: gameData.board,
           nextCard: gameData.nextCard,
           state: gameData.state,
-          gameId: gameId
+          gameId: gameId,
+          name: userDoc.data().name
         });
       }.bind(this));
       var removeListener = gameRef.onSnapshot(this.gameListener);
@@ -73,6 +74,7 @@ export default class GameBoard extends Component {
       gameId: this.state.gameId,
       checkForSet: this.checkSet,
       changeView: this.props.changeView,
+      message: this.state.state,
       ...this.state.urls
     }
     return <GameBoardView {...passedProps} />
@@ -119,7 +121,8 @@ export default class GameBoard extends Component {
       }
       var newBoard = {
         board: board,
-        nextCard: this.state.nextCard + 3
+        nextCard: this.state.nextCard + 3,
+        state: this.state.name + " found a set!"
       }
       this.state.gameRef.update(newBoard);
     }
@@ -128,6 +131,7 @@ export default class GameBoard extends Component {
   gameListener = (gameSnapshot) => {
     var newBoard = gameSnapshot.get("board");
     var nextCard = gameSnapshot.get("nextCard");
+    var state = gameSnapshot.get("state");
     // Check if there was actually an update
     if (nextCard === this.state.nextCard) {
       return;
@@ -145,7 +149,8 @@ export default class GameBoard extends Component {
     this.setState({
       board: newBoard,
       nextCard: nextCard,
-      selected: sel
+      selected: sel,
+      state: state
     });
   }
 }

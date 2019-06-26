@@ -34,13 +34,19 @@ export default class GameBoardView extends Component {
     if (this.props.selected.length === 3) {
       checkSet=<button onClick={this.props.checkForSet}>Check For Set</button>
     }
+
+    var message;
+    if (this.props.message !== "Waiting") {
+      message = this.props.message;
+    }
     return (
       <div>
         {rows}<br />
         <div className="center-align">
           {checkSet}<br />
           GameId:&nbsp;{this.props.gameId}<br />
-          <button onClick={this.props.changeView}>Back to Dashboard</button>
+          <button onClick={this.props.changeView}>Back to Dashboard</button><br />
+          {message}
         </div>
       </div>
     )
