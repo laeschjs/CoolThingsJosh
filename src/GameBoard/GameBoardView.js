@@ -18,7 +18,7 @@ export default class GameBoardView extends Component {
     var rows = [];
     var cols = [];
     var check = "";
-    for (var i = 0; i < 12; i++) {
+    for (var i = 0; i < this.props.urls.length; i++) {
       check = "";
       if (this.props.selected.indexOf(i) !== -1) {
         check = (
@@ -33,7 +33,7 @@ export default class GameBoardView extends Component {
           <img onClick={this.props.imgSelected(i)} src={this.props.urls[i]} alt="Game Card" />
         </div>
       );
-      if (i % 4 === 3) {
+      if (i % 4 === 3 || i == this.props.urls.length - 1) {
         rows.push(
           <div key={"row" + (i / 4 + 1)} className="row">
             {cols}

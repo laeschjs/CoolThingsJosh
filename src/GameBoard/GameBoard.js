@@ -9,7 +9,7 @@ export default class GameBoard extends Component {
     super(props);
     this.state = {
       deck: [], selected: [], board: [],
-      nextCard: "", state: "", urls: [],
+      nextCard: null, state: "", urls: [],
       gameRef: undefined, gameId: undefined
     }
   }
@@ -48,20 +48,22 @@ export default class GameBoard extends Component {
     //   this.props.changeView()
     // }
     // Check if there was actually an update
-    if (prevState.nextCard === this.state.nextCard) {
-      return;
-    }
     var oldBoard = prevState.board;
     var newBoard = this.state.board;
+    if (oldBoard.toString() === newBoard.toString()) {
+      return;
+    }
     for (var i = 0; i < newBoard.length; i++) {
       if (oldBoard[i] !== newBoard[i]) {
         // The image at this board location has changed. Redraw it
         this.getImage(i);
       }
     }
-    var state = {};
-    state.urls = this.state.urls.slice(0,newBoard.length);
-    this.setState(state);
+    if (newBoard.length < oldBoard.length) {
+      var state = {};
+      state.urls = this.state.urls.slice(0,newBoard.length);
+      this.setState(state);
+    }
   }
 
   render() {
@@ -107,20 +109,29 @@ export default class GameBoard extends Component {
 
   submitSet = () => {
     var board = this.state.board.slice();
+    var endIndex = board.length;
     var sel = this.state.selected; // Just to not always type this.state.selected
     if (checkForSet(board[sel[0]], board[sel[1]], board[sel[2]])) {
-      // TODO: if more than 12 cards then rearrange and don't add
-
-      // Add 3 more cards from the deck
-      for (var i = 0; i < 3; i++) {
-        board[sel[i]] = this.state.deck[this.state.nextCard + i];
+      if (board.length <= 12) {
+        this.add3Cards(sel[0], sel[1], sel[2], "found a set!");
+      } else {
+        sel.sort(function(a, b) { return b - 0 - (a - 0)});
+        for (var i = 0; i < 3; i++) {
+          if (sel[i] < 12) {
+            endIndex--;
+            board[sel[i]] = board[endIndex];
+            board.splice(endIndex,1);
+          } else {
+            endIndex--;
+            board.splice(sel[i],1);
+          }
+        }
+        var newBoard = {
+          board: board,
+          state: this.state.name + " found a set!"
+        }
+        this.state.gameRef.update(newBoard);
       }
-      var newBoard = {
-        board: board,
-        nextCard: this.state.nextCard + 3,
-        state: this.state.name + " found a set!"
-      }
-      this.state.gameRef.update(newBoard);
     }
   }
 
@@ -136,7 +147,23 @@ export default class GameBoard extends Component {
       }
     }
     // No set found so add 3 more cards
+    this.add3Cards(board.length, board.length + 1, board.length + 2,
+      "added more cards because no sets were found");
     return false
+  }
+
+  add3Cards = (index1, index2, index3, message) => {
+    var board = this.state.board.slice();
+    // Add 3 more cards from the deck
+    board[index1] = this.state.deck[this.state.nextCard];
+    board[index2] = this.state.deck[this.state.nextCard + 1];
+    board[index3] = this.state.deck[this.state.nextCard + 2];
+    var newBoard = {
+      board: board,
+      nextCard: this.state.nextCard + 3,
+      state: this.state.name + " " + message
+    }
+    this.state.gameRef.update(newBoard);
   }
 
   gameListener = (gameSnapshot) => {
@@ -144,7 +171,7 @@ export default class GameBoard extends Component {
     var nextCard = gameSnapshot.get("nextCard");
     var state = gameSnapshot.get("state");
     // Check if there was actually an update
-    if (nextCard === this.state.nextCard) {
+    if (newBoard.toString() === this.state.board.toString()) {
       return;
     }
     //MAYBE look into keeping cards selected that weren't
