@@ -20,7 +20,7 @@ export default class GameBoardView extends Component {
     var check = "";
     for (var i = 0; i < 12; i++) {
       check = "";
-      if (this.props.selected.indexOf("img" + i) !== -1) {
+      if (this.props.selected.indexOf(i) !== -1) {
         check = (
           <span className="green-text">
             <i className="fas fa-check-circle"></i>
@@ -30,7 +30,7 @@ export default class GameBoardView extends Component {
       cols.push(
         <div key={"col" + i % 4} className="col s3 center-align">
           {check}
-          <img onClick={this.props.imgSelected("img" + i)} src={this.props["img" + i]} alt="Game Card" />
+          <img onClick={this.props.imgSelected(i)} src={this.props.urls[i]} alt="Game Card" />
         </div>
       );
       if (i % 4 === 3) {

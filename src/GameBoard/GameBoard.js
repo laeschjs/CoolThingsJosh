@@ -7,17 +7,10 @@ import { checkForSet } from '../Utilities';
 export default class GameBoard extends Component {
   constructor(props) {
     super(props);
-    var imgs = {
-      img0: "", img1: "", img2: "", img3: "",
-      img4: "", img5: "", img6: "", img7: "",
-      img8: "", img9: "", img10: "", img11: "",
-      length: 12
-    };
     this.state = {
-      deck: [], selected: [], gameRef: undefined,
-      nextCard: "", state: "", gameId: undefined,
-      board: Object.assign({}, imgs), // Make a copy so they aren't
-      urls: Object.assign({}, imgs)   // pointing at the same object
+      deck: [], selected: [], board: [],
+      nextCard: "", state: "", urls: [],
+      gameRef: undefined, gameId: undefined
     }
   }
 
@@ -60,12 +53,15 @@ export default class GameBoard extends Component {
     }
     var oldBoard = prevState.board;
     var newBoard = this.state.board;
-    for (var img in oldBoard) {
-      if (oldBoard[img] !== newBoard[img]) {
+    for (var i = 0; i < newBoard.length; i++) {
+      if (oldBoard[i] !== newBoard[i]) {
         // The image at this board location has changed. Redraw it
-        this.getImage(img);
+        this.getImage(i);
       }
     }
+    var state = {};
+    state.urls = this.state.urls.slice(0,newBoard.length);
+    this.setState(state);
   }
 
   render() {
@@ -77,14 +73,15 @@ export default class GameBoard extends Component {
       changeView: this.props.changeView,
       message: this.state.state,
       checkSet: this.checkSet,
-      ...this.state.urls
+      urls: this.state.urls
     }
     return <GameBoardView {...passedProps} />
   }
 
   getImage = (index) => {
     firebase.storage().ref().child(this.state.board[index]+".png").getDownloadURL().then(function(url){
-      var state = { urls: Object.assign({}, this.state.urls) };
+      var state = {};
+      state.urls = this.state.urls.slice();
       state.urls[index] = url;
       this.setState(state);
     }.bind(this)).catch(function(error){
@@ -109,16 +106,13 @@ export default class GameBoard extends Component {
   }
 
   submitSet = () => {
-    var board = JSON.parse(JSON.stringify(this.state.board));
+    var board = this.state.board.slice();
     var sel = this.state.selected; // Just to not always type this.state.selected
     if (checkForSet(board[sel[0]], board[sel[1]], board[sel[2]])) {
-      // Remove the set from the board
-      for (var i = 0; i < 3; i++) {
-        delete board[sel[i]];
-      }
       // TODO: if more than 12 cards then rearrange and don't add
+
       // Add 3 more cards from the deck
-      for (i = 0; i < 3; i++) {
+      for (var i = 0; i < 3; i++) {
         board[sel[i]] = this.state.deck[this.state.nextCard + i];
       }
       var newBoard = {
@@ -131,16 +125,17 @@ export default class GameBoard extends Component {
   }
 
   checkSet = () => {
-    var board = JSON.parse(JSON.stringify(this.state.board));
+    var board = this.state.board.slice();
     for (var i = 0; i < board.length - 2; i++) {
       for (var j = i + 1; j < board.length - 1; j++) {
         for (var k = j + 1; k < board.length; k++) {
-          if (checkForSet(board["img" + i], board["img" + j], board["img" + k])) {
+          if (checkForSet(board[i], board[j], board[k])) {
             return true
           }
         }
       }
     }
+    // No set found so add 3 more cards
     return false
   }
 
@@ -152,20 +147,22 @@ export default class GameBoard extends Component {
     if (nextCard === this.state.nextCard) {
       return;
     }
-    var sel = this.state.selected.slice();
-    var oldBoard = this.state.board;
-    for (var img in oldBoard) {
-      if (oldBoard[img] !== newBoard[img]) {
-        if (sel.indexOf(img) !== -1) {
-          // Also make it not selected anymore
-          sel.splice(sel.indexOf(img),1);
-        }
-      }
-    }
+    //MAYBE look into keeping cards selected that weren't
+    //removed from another user finding a set
+    // var sel = this.state.selected.slice();
+    // var oldBoard = this.state.board.slice();
+    // for (var i = 0; i < oldBoard.length; i++) {
+    //   if (oldBoard[i] !== newBoard[i]) {
+    //     if (sel.indexOf(i) !== -1) {
+    //       // Also make it not selected anymore
+    //       sel.splice(i,1);
+    //     }
+    //   }
+    // }
     this.setState({
       board: newBoard,
       nextCard: nextCard,
-      selected: sel,
+      selected: [],
       state: state
     });
   }

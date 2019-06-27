@@ -78,14 +78,10 @@ export default class Dashboard extends Component {
   newGame = () => {
     var deck = makeDeck();
     var boardArr = deck.slice(0,12);
-    var board = {};
-    for (var i = 0; i < boardArr.length; i++) {
-      board["img" + i] = boardArr[i];
-    }
     this.props.db.collection("games").add({
       state: "Waiting",
       queue: [],
-      board: board,
+      board: boardArr,
       deck: deck,
       nextCard: 12
     })
