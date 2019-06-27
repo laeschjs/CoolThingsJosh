@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 
 export default class GameBoardView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: ""
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.message !== this.props.message) {
+      this.setState({message: this.props.message});
+    }
+  }
+
   render() {
     var rows = [];
     var cols = [];
@@ -30,25 +43,27 @@ export default class GameBoardView extends Component {
       }
     }
 
-    var checkSet = <button disabled={true}>Select 3 cards</button>;
+    var submitButton = <button disabled={true}>Select 3 cards</button>;
     if (this.props.selected.length === 3) {
-      checkSet=<button onClick={this.props.checkForSet}>Check For Set</button>
-    }
-
-    var message;
-    if (this.props.message !== "Waiting") {
-      message = this.props.message;
+      submitButton=<button onClick={this.props.submitSet}>Submit Set</button>
     }
     return (
       <div>
         {rows}<br />
         <div className="center-align">
-          {checkSet}<br />
+          {submitButton}<br />
           GameId:&nbsp;{this.props.gameId}<br />
           <button onClick={this.props.changeView}>Back to Dashboard</button><br />
-          {message}
+          {this.state.message}<br />
+          <button onClick={this.checkSet}>I don't think a Set exists</button>
         </div>
       </div>
     )
+  }
+
+  checkSet = () => {
+    if (this.props.checkSet()) {
+      this.setState({message: "A set exists! Keep searching!"});
+    }
   }
 }

@@ -10,7 +10,8 @@ export default class GameBoard extends Component {
     var imgs = {
       img0: "", img1: "", img2: "", img3: "",
       img4: "", img5: "", img6: "", img7: "",
-      img8: "", img9: "", img10: "", img11: ""
+      img8: "", img9: "", img10: "", img11: "",
+      length: 12
     };
     this.state = {
       deck: [], selected: [], gameRef: undefined,
@@ -72,9 +73,10 @@ export default class GameBoard extends Component {
       selected: this.state.selected,
       imgSelected: this.imgSelected,
       gameId: this.state.gameId,
-      checkForSet: this.checkSet,
+      submitSet: this.submitSet,
       changeView: this.props.changeView,
       message: this.state.state,
+      checkSet: this.checkSet,
       ...this.state.urls
     }
     return <GameBoardView {...passedProps} />
@@ -106,7 +108,7 @@ export default class GameBoard extends Component {
     }.bind(this)
   }
 
-  checkSet = () => {
+  submitSet = () => {
     var board = JSON.parse(JSON.stringify(this.state.board));
     var sel = this.state.selected; // Just to not always type this.state.selected
     if (checkForSet(board[sel[0]], board[sel[1]], board[sel[2]])) {
@@ -126,6 +128,20 @@ export default class GameBoard extends Component {
       }
       this.state.gameRef.update(newBoard);
     }
+  }
+
+  checkSet = () => {
+    var board = JSON.parse(JSON.stringify(this.state.board));
+    for (var i = 0; i < board.length - 2; i++) {
+      for (var j = i + 1; j < board.length - 1; j++) {
+        for (var k = j + 1; k < board.length; k++) {
+          if (checkForSet(board["img" + i], board["img" + j], board["img" + k])) {
+            return true
+          }
+        }
+      }
+    }
+    return false
   }
 
   gameListener = (gameSnapshot) => {
