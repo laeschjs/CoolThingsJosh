@@ -43,10 +43,7 @@ export default class GameBoard extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // (maybe) TODO: Check if the game is over
-    // if (this.state.urls["img11"] === "") {
-    //   this.props.changeView()
-    // }
+
     // Check if there was actually an update
     var oldBoard = prevState.board;
     var newBoard = this.state.board;
@@ -132,6 +129,8 @@ export default class GameBoard extends Component {
         }
         this.state.gameRef.update(newBoard);
       }
+    } else {
+      this.setState({state: "Look closer because that isn't a Set"});
     }
   }
 
@@ -141,23 +140,35 @@ export default class GameBoard extends Component {
       for (var j = i + 1; j < board.length - 1; j++) {
         for (var k = j + 1; k < board.length; k++) {
           if (checkForSet(board[i], board[j], board[k])) {
-            return true
+            return true;
           }
         }
       }
     }
-    // No set found so add 3 more cards
+    // No set found so add 3 more cards if available
+    if (this.state.nextCard >= 81) {
+      console.log("The game has ended");
+      this.state.gameRef.update({state: "Game Over"});
+      return false;
+    }
+
     this.add3Cards(board.length, board.length + 1, board.length + 2,
       "added more cards because no sets were found");
-    return false
+    return false;
   }
 
   add3Cards = (index1, index2, index3, message) => {
     var board = this.state.board.slice();
-    // Add 3 more cards from the deck
-    board[index1] = this.state.deck[this.state.nextCard];
-    board[index2] = this.state.deck[this.state.nextCard + 1];
-    board[index3] = this.state.deck[this.state.nextCard + 2];
+    if (this.state.nextCard < 81) {
+      // Add 3 more cards from the deck
+      board[index1] = this.state.deck[this.state.nextCard];
+      board[index2] = this.state.deck[this.state.nextCard + 1];
+      board[index3] = this.state.deck[this.state.nextCard + 2];
+    } else {
+      board.splice(index3,1);
+      board.splice(index2,1);
+      board.splice(index1,1);
+    }
     var newBoard = {
       board: board,
       nextCard: this.state.nextCard + 3,
@@ -171,7 +182,8 @@ export default class GameBoard extends Component {
     var nextCard = gameSnapshot.get("nextCard");
     var state = gameSnapshot.get("state");
     // Check if there was actually an update
-    if (newBoard.toString() === this.state.board.toString()) {
+    if (newBoard.toString() === this.state.board.toString() &&
+        state === this.state.state) {
       return;
     }
     //MAYBE look into keeping cards selected that weren't

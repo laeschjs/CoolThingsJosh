@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+var SETEXISTS = "A set exists! Keep searching!";
+
 export default class GameBoardView extends Component {
   constructor(props) {
     super(props);
@@ -9,7 +11,9 @@ export default class GameBoardView extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.message !== this.props.message) {
+    if ((prevProps.message !== this.props.message 
+        || prevProps.urls.join(",") !== this.props.urls.join(","))
+          && prevProps.message !== "Game Over") {
       this.setState({message: this.props.message});
     }
   }
@@ -33,7 +37,7 @@ export default class GameBoardView extends Component {
           <img onClick={this.props.imgSelected(i)} src={this.props.urls[i]} alt="Game Card" />
         </div>
       );
-      if (i % 4 === 3 || i == this.props.urls.length - 1) {
+      if (i % 4 === 3 || i === this.props.urls.length - 1) {
         rows.push(
           <div key={"row" + (i / 4 + 1)} className="row">
             {cols}
@@ -63,7 +67,7 @@ export default class GameBoardView extends Component {
 
   checkSet = () => {
     if (this.props.checkSet()) {
-      this.setState({message: "A set exists! Keep searching!"});
+      this.setState({message: SETEXISTS});
     }
   }
 }
