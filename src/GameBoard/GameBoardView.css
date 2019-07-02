@@ -1,0 +1,54 @@
+
+.button {
+	display: inline-block;
+	background-color: #3A3942;
+	border: 5px solid;
+	border-radius: 20px;
+	padding: 1%;
+	margin: 0.5%;
+	font-size: 23px;
+}
+
+.button:hover {
+	cursor: pointer;
+}
+
+#submit {
+	color: #4ad254;
+	border-color: #4ad254;
+}
+
+#submit:hover {
+	background-color: #4ad254;
+	color: #3A3942;
+}
+
+#submit.disabled:hover {
+	background-color: #3A3942;
+	color: #4ad254;
+	cursor: not-allowed;
+}
+
+#back {
+	color: #ff4c4c;
+	border-color: #ff4c4c;
+}
+
+#back:hover {
+	background-color: #ff4c4c;
+	color: #3A3942;
+}
+
+#check {
+	color: #b15dff;
+	border-color: #b15dff;
+}
+
+#check:hover {
+	background-color: #b15dff;
+	color: #3A3942;
+}
+
+.rightPane {
+	font-size: 23px;
+}

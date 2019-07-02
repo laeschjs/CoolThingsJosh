@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './GameBoardView.css';
 
 var SETEXISTS = "A set exists! Keep searching!";
 
@@ -34,12 +35,12 @@ export default class GameBoardView extends Component {
       cols.push(
         <div key={"col" + i % 4} className="col s3 center-align">
           {check}
-          <img onClick={this.props.imgSelected(i)} src={this.props.urls[i]} alt="Game Card" />
+          <img style={{width: "18%"}} onClick={this.props.imgSelected(i)} src={this.props.urls[i]} alt="Game Card" />
         </div>
       );
       if (i % 4 === 3 || i === this.props.urls.length - 1) {
         rows.push(
-          <div key={"row" + (i / 4 + 1)} className="row">
+          <div style={{height: "15%"}} key={"row" + (i / 4 + 1)} className="row">
             {cols}
           </div>
         );
@@ -47,19 +48,21 @@ export default class GameBoardView extends Component {
       }
     }
 
-    var submitButton = <button disabled={true}>Select 3 cards</button>;
+    var submitButton = <div id="submit" className="button disabled">Select 3 cards</div>;
     if (this.props.selected.length === 3) {
-      submitButton=<button onClick={this.props.submitSet}>Submit Set</button>
+      submitButton=<div id="submit" className="button" onClick={this.props.submitSet}><span className="buttonSpan">Submit Set</span></div>
     }
     return (
-      <div>
+      <div style={{height: "90%", marginTop: "1%"}}>
         {rows}<br />
-        <div className="center-align">
-          {submitButton}<br />
-          GameId:&nbsp;{this.props.gameId}<br />
-          <button onClick={this.props.changeView}>Back to Dashboard</button><br />
-          {this.state.message}<br />
-          <button onClick={this.checkSet}>I don't think a Set exists</button>
+        <div style={{height: "25%"}} className="center-align">
+          <div style={{width: "50%", height: "100%", display: "inline-block", float: "left"}}>
+            {submitButton}<br />
+            <div className="button" id="back" onClick={this.props.changeView}>Back to Dashboard</div><br />
+            <div className="button" id="check" disabled={this.state.message === "Game Over"} onClick={this.checkSet}>I don't think a Set exists</div>
+          </div>
+          <span className="rightPane">GameId:&nbsp;{this.props.gameId}</span><br />
+          <span className="rightPane">{this.state.message}</span><br />
         </div>
       </div>
     )
