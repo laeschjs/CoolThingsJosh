@@ -52,3 +52,33 @@
 .rightPane {
 	font-size: 23px;
 }
+
+.bottomPane {
+	height: 100%;
+	display: inline-block;
+	margin: 0px 0px 50px;
+}
+
+.myCol {
+	width: 33%;
+	display: inline-block;
+}
+
+.cardImage {
+	transform: rotate(90deg);
+	width: 25%;
+}
+
+@media (min-width: 450px) {
+	.bottomPane {
+		width: 50%;
+		float: left;
+	}
+
+	.myCol {
+		margin-top: -35px;
+	}
+
+	.cardImage { width: 20% }
+}
+

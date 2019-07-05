@@ -149,4 +149,5 @@
 	position: relative;
 	height: 20%;
 	display: block;
+	overflow: hidden;
 }

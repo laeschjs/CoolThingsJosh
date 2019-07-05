@@ -33,14 +33,14 @@ export default class GameBoardView extends Component {
         );
       }
       cols.push(
-        <div key={"col" + i % 4} className="col s3 center-align">
+        <div key={"col" + i % 3} className="myCol center-align">
           {check}
-          <img style={{width: "18%"}} onClick={this.props.imgSelected(i)} src={this.props.urls[i]} alt="Game Card" />
+          <img className="cardImage" onClick={this.props.imgSelected(i)} src={this.props.urls[i]} alt="Game Card" />
         </div>
       );
-      if (i % 4 === 3 || i === this.props.urls.length - 1) {
+      if (i % 3 === 2 || i === this.props.urls.length - 1) {
         rows.push(
-          <div style={{height: "15%"}} key={"row" + (i / 4 + 1)} className="row">
+          <div key={"row" + (i / 4 + 1)} className="row" style={{maxHeight: "150px"}}>
             {cols}
           </div>
         );
@@ -56,13 +56,15 @@ export default class GameBoardView extends Component {
       <div style={{height: "90%", marginTop: "1%"}}>
         {rows}<br />
         <div style={{height: "25%"}} className="center-align">
-          <div style={{width: "50%", height: "100%", display: "inline-block", float: "left"}}>
+          <div className="bottomPane">
             {submitButton}<br />
             <div className="button" id="back" onClick={this.props.changeView}>Back to Dashboard</div><br />
             <div className="button" id="check" disabled={this.state.message === "Game Over"} onClick={this.checkSet}>I don't think a Set exists</div>
           </div>
-          <span className="rightPane">GameId:&nbsp;{this.props.gameId}</span><br />
-          <span className="rightPane">{this.state.message}</span><br />
+          <div className="bottomPane">
+            <span className="rightPane">GameId:&nbsp;{this.props.gameId}</span><br />
+            <span className="rightPane">{this.state.message}</span>
+          </div>
         </div>
       </div>
     )
