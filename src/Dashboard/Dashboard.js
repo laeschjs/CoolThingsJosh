@@ -38,7 +38,6 @@ export default class Dashboard extends Component {
       <div id="joinCard" className={joinCardClass} onClick={this.join}><span className="titleSpan">Join Game</span></div>
     );
     if (this.state.big) {
-      //TODO
       joinCard = (
         <div id="joinCardBig" className="joinCard">
           <span className="icon" onClick={this.notjoin}>
@@ -79,7 +78,7 @@ export default class Dashboard extends Component {
     var deck = makeDeck();
     var boardArr = deck.slice(0,12);
     this.props.db.collection("games").add({
-      state: "Waiting",
+      state: "",
       queue: [],
       board: boardArr,
       deck: deck,

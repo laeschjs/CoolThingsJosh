@@ -52,7 +52,10 @@ export default class SetGame extends Component {
     var obj = {};
     obj.gameId = newId;
     obj.toRender = "GameBoard";
-    this.props.db.doc("users/" + this.state.uid).update({currentGame: newId});
+    this.props.db.doc("users/" + this.state.uid).update({
+      currentGame: newId,
+      numSets: 0
+    });
     this.setState(obj);
   }
 

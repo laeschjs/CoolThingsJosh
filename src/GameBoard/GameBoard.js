@@ -10,14 +10,15 @@ export default class GameBoard extends Component {
     this.state = {
       deck: [], selected: [], board: [],
       nextCard: null, state: "", urls: [],
-      gameRef: undefined, gameId: undefined
+      gameRef: undefined, gameId: undefined,
+      userRef: undefined
     }
   }
 
   componentDidMount() {
     var userRef = this.props.db.doc("users/" + this.props.uid);
     userRef.get().then(function(userDoc) {
-      var gameId = userDoc.data().currentGame;
+      var gameId = userDoc.get("currentGame");
       var gameRef = this.props.db.doc("games/" + gameId);
       gameRef.get().then(function(gameDoc){
         var gameData = gameDoc.data();
@@ -33,7 +34,8 @@ export default class GameBoard extends Component {
       var removeListener = gameRef.onSnapshot(this.gameListener);
       this.setState({
         removeListener: removeListener,
-        gameRef: gameRef
+        gameRef: gameRef,
+        userRef: userRef
       });
     }.bind(this));
   }
@@ -111,6 +113,7 @@ export default class GameBoard extends Component {
     if (checkForSet(board[sel[0]], board[sel[1]], board[sel[2]])) {
       if (board.length <= 12) {
         this.add3Cards(sel[0], sel[1], sel[2], "found a set!");
+        this.state.userRef.update({numSets: firebase.firestore.FieldValue.increment(1)});
       } else {
         sel.sort(function(a, b) { return b - 0 - (a - 0)});
         for (var i = 0; i < 3; i++) {
@@ -128,6 +131,7 @@ export default class GameBoard extends Component {
           state: this.state.name + " found a set!"
         }
         this.state.gameRef.update(newBoard);
+        this.state.userRef.update({numSets: firebase.firestore.FieldValue.increment(1)});
       }
     } else {
       this.setState({state: "Look closer because that isn't a Set"});
@@ -171,7 +175,7 @@ export default class GameBoard extends Component {
     }
     var newBoard = {
       board: board,
-      nextCard: this.state.nextCard + 3,
+      nextCard: firebase.firestore.FieldValue.increment(3),
       state: this.state.name + " " + message
     }
     this.state.gameRef.update(newBoard);
@@ -198,11 +202,22 @@ export default class GameBoard extends Component {
     //     }
     //   }
     // }
-    this.setState({
-      board: newBoard,
-      nextCard: nextCard,
-      selected: [],
-      state: state
-    });
+    if (state === "Game Over") {
+      this.state.userRef.get().then(function(userDoc) {
+        this.setState({
+          board: newBoard,
+          nextCard: nextCard,
+          selected: [],
+          state: "Game Over. You found " + userDoc.get("numSets") + " sets"
+        })
+      }.bind(this));
+    } else {
+      this.setState({
+        board: newBoard,
+        nextCard: nextCard,
+        selected: [],
+        state: state
+      });
+    }
   }
 }
