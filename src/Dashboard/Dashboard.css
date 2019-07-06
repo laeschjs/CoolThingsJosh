@@ -126,28 +126,33 @@
 }
 
 .myCard {
-	height: 85%;
+	height: 50%;
 	top: 7.5%;
 	background-color: #3A3942;
 	position: relative;
 	border: 5px solid;
 	border-radius: 70px;
+	margin: 10px 0px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .myCard:hover {
 	cursor: pointer;
 }
 
-.myRow {
+.cardRow {
 	height: 50%;
 	margin: 0px;
 }
 
 .titleSpan {
 	font-size: 48px;
-	top: 40%;
-	position: relative;
-	height: 20%;
-	display: block;
-	overflow: hidden;
+}
+
+@media (min-width: 600px) {
+	.myCard {
+		height: 85%
+	}
 }

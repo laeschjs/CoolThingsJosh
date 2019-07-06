@@ -59,9 +59,17 @@
 	margin: 0px 0px 50px;
 }
 
+.myRow {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .myCol {
 	width: 33%;
 	display: inline-block;
+	margin-bottom: -5%;
+	position: relative;
 }
 
 .cardImage {
@@ -69,16 +77,34 @@
 	width: 25%;
 }
 
-@media (min-width: 450px) {
+.checkMark {
+	position: absolute;
+	top: 35%;
+	left: 47%;
+	z-index: 1;
+	font-size: 25px;
+	color: black;
+}
+
+/*For non mobile*/
+@media (min-width: 600px) {
 	.bottomPane {
 		width: 50%;
 		float: left;
 	}
 
-	.myCol {
-		margin-top: -35px;
-	}
-
 	.cardImage { width: 20% }
 }
 
+@media (max-width: 600px) {
+	.cardImage {
+		width: 32%;
+	}
+}
+
+/*For HD displays*/
+@media (min-width: 1500px) {
+	.myCol {
+		margin-bottom: -3%;
+	}
+}

@@ -33,7 +33,7 @@ export default class Dashboard extends Component {
       resumeClick = this.resume;
     }
 
-    var joinCardClass = "joinCard " + this.state.joinAnim;
+    var joinCardClass = "myCard joinCard " + this.state.joinAnim;
     var joinCard = (
       <div id="joinCard" className={joinCardClass} onClick={this.join}><span className="titleSpan">Join Game</span></div>
     );
@@ -52,14 +52,16 @@ export default class Dashboard extends Component {
     }
     return (
       <div id="dashboardContainer">
-        <div className="myRow row">
-          <div id="resumeCard" className={"myCard col s4 offset-s1 " + isDisabled} onClick={resumeClick}><span className="titleSpan">Resume Game</span></div>
-          <div id="newCard" className="myCard col s4 offset-s2" onClick={this.newGame}><span className="titleSpan">New Game</span></div>
+        <div className="cardRow row">
+          <div id="resumeCard" className={"myCard col s10 offset-s1 m4 offset-m1 " + isDisabled} onClick={resumeClick}><span className="titleSpan">Resume Game</span></div>
+          <div id="newCard" className="myCard col s10 offset-s1 m4 offset-m2" onClick={this.newGame}><span className="titleSpan">New Game</span></div>
+          <div className="col m1"></div>
         </div>
-        <div className="myRow row">
+        <div className="cardRow row">
           {joinCard}
-          <div className="col s4 offset-s1"></div>
-          <div id="logoutCard" className="myCard col s4 offset-s2" onClick={this.logout}><span className="titleSpan">Logout</span></div>
+          <div className="col s10 offset-s1 m4 offset-m1"></div>
+          <div id="logoutCard" className="myCard col s10 offset-s1 m4 offset-m2" onClick={this.logout}><span className="titleSpan">Logout</span></div>
+          <div className="col m1"></div>
         </div>
       </div>
     );
