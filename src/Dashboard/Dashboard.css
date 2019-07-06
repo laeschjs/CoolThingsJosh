@@ -35,21 +35,20 @@
 
 @keyframes shrinkJoin {
 	to {
-		height: 42.5%;
 		width: 33.3%;
-		top: 53.75%;
+		top: 7.5%;
+		height: 85%;
 	}
 	from {
-		width: 83.34%;
-		height: 92.6%;
-		top: 3.74%;
+		width: 84%;
+		top: -99%;
+		height: 190%;
 	}
 }
 
 #joinCard {
-	height: 42.5%;
-	width: 33.3%;
-	top: 53.75%;
+	color: #ff4c4c;
+	border-color: #ff4c4c;
 }
 
 .joinCardAnim {
@@ -57,43 +56,37 @@
 	animation-duration: 1s;
 }
 
-.joinCard {
-	color: #ff4c4c;
-	z-index: 1;
-	position: absolute;
-	left: 8.33%;
-	border: 5px solid #ff4c4c;
-	border-radius: 70px;
-}
-
 #joinCard:hover {
 	background-color: #ff4c4c;
 	color: #3A3942;
-	cursor: pointer;
 }
 
 @keyframes growJoin {
 	from {
-		height: 42.5%;
 		width: 33.3%;
 		top: 53.75%;
 	}
 	to {
-		width: 83.34%;
-		height: 92.6%;
+		width: 84%;
 		top: 3.74%;
 	}
 }
 
 #joinCardBig {
-	width: 83.34%;
-	height: 92.6%;
+	width: 84%;
 	top: 3.74%;
+	bottom: 2%;
+	left: 8%;
 	background-color: #ff4c4c;
-	color: #3A3942;
 	padding: 5%;
 	animation-name: growJoin;
 	animation-duration: 1s;
+	position: fixed;
+	z-index: 1;
+	border-radius: 70px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 #joinCardBig > div > * , #joinCardBig > *{
@@ -105,14 +98,11 @@
 #joinCardBig > .icon {
 	position: absolute;
 	left: 7%;
+	top: 7%;
 }
 
 #joinCardBig > div > label {
 	top: -25px;
-}
-
-#joinCardBig > div {
-	margin-top: 25%;
 }
 
 #logoutCard {
@@ -126,7 +116,7 @@
 }
 
 .myCard {
-	height: 50%;
+	height: 85%;
 	top: 7.5%;
 	background-color: #3A3942;
 	position: relative;
@@ -151,8 +141,22 @@
 	font-size: 48px;
 }
 
-@media (min-width: 600px) {
+/*Mobile only*/
+@media (max-width: 600px) {
 	.myCard {
-		height: 85%
+		height: 50%
+	}
+
+	@keyframes shrinkJoin {
+		to {
+			width: 83%;
+			top: 8%;
+			height: 50%;
+		}
+		from {
+			width: 84%;
+			top: -99%;
+			height: 195%;
+		}
 	}
 }

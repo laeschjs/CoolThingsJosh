@@ -33,7 +33,9 @@ export default class Dashboard extends Component {
       resumeClick = this.resume;
     }
 
-    var joinCardClass = "myCard joinCard " + this.state.joinAnim;
+    var joinCardClass = "myCard col s10 offset-s1 m4 offset-m1";
+    //Hacky way to prevent the animation from happen upon viewing the page for the first time
+    joinCardClass += " " + this.state.joinAnim;
     var joinCard = (
       <div id="joinCard" className={joinCardClass} onClick={this.join}><span className="titleSpan">Join Game</span></div>
     );
