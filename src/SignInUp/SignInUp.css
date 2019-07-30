@@ -15,6 +15,12 @@
 		margin-top: 25px;
 	}
 }
+
+#messageBox {
+	color: black;
+	text-align: right;
+	margin-top: 1%;
+}
 /*
 #messageBox {
 	display: none;

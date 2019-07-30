@@ -27,7 +27,7 @@ export default class Dashboard extends Component {
 
   render() {
     var isDisabled = "disabled";
-    var resumeClick = "";
+    var resumeClick = function(){};
     if (this.props.gameId) {
       isDisabled = "";
       resumeClick = this.resume;
