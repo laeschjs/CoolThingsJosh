@@ -1,0 +1,43 @@
+#joinCard {
+	color: #ff4c4c;
+	border-color: #ff4c4c;
+}
+
+#joinCard:hover {
+	background-color: #ff4c4c;
+	color: #3A3942;
+}
+
+.joinCardAnim {
+	animation-name: shrinkJoin;
+	animation-duration: 1s;
+}
+
+@keyframes shrinkJoin {
+	to {
+		width: 33.3%;
+		top: 7.5%;
+		height: 85%;
+	}
+	from {
+		width: 84%;
+		top: -99%;
+		height: 190%;
+	}
+}
+
+#joinCardBig {
+	animation-name: growJoin;
+	background-color: #ff4c4c;
+}
+
+@keyframes growJoin {
+	from {
+		width: 33.3%;
+		top: 53.75%;
+	}
+	to {
+		width: 84%;
+		top: 3.74%;
+	}
+}

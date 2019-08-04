@@ -11,7 +11,7 @@ export default class GameBoard extends Component {
       deck: [], selected: [], board: [],
       nextCard: null, state: "", urls: [],
       gameRef: undefined, gameId: undefined,
-      userRef: undefined
+      userRef: undefined, manualId: undefined
     }
   }
 
@@ -28,6 +28,7 @@ export default class GameBoard extends Component {
           nextCard: gameData.nextCard,
           state: gameData.state,
           gameId: gameId,
+          manualId: gameData.manualId,
           name: userDoc.data().name
         });
       }.bind(this));
@@ -66,10 +67,14 @@ export default class GameBoard extends Component {
   }
 
   render() {
+    var ID = this.state.gameId; // Handle legacy games
+    if (this.state.manualId) {
+      ID = this.state.manualId;
+    }
     var passedProps = {
       selected: this.state.selected,
       imgSelected: this.imgSelected,
-      gameId: this.state.gameId,
+      gameId: ID,
       submitSet: this.submitSet,
       changeView: this.props.changeView,
       message: this.state.state,

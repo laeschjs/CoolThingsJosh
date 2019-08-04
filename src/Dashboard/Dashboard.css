@@ -23,63 +23,12 @@
 	cursor: not-allowed;
 }
 
-#newCard {
-	color: #4ad254;
-	border-color: #4ad254;
-}
-
-#newCard:hover {
-	background-color: #4ad254;
-	color: #3A3942;
-}
-
-@keyframes shrinkJoin {
-	to {
-		width: 33.3%;
-		top: 7.5%;
-		height: 85%;
-	}
-	from {
-		width: 84%;
-		top: -99%;
-		height: 190%;
-	}
-}
-
-#joinCard {
-	color: #ff4c4c;
-	border-color: #ff4c4c;
-}
-
-.joinCardAnim {
-	animation-name: shrinkJoin;
-	animation-duration: 1s;
-}
-
-#joinCard:hover {
-	background-color: #ff4c4c;
-	color: #3A3942;
-}
-
-@keyframes growJoin {
-	from {
-		width: 33.3%;
-		top: 53.75%;
-	}
-	to {
-		width: 84%;
-		top: 3.74%;
-	}
-}
-
-#joinCardBig {
+.Big {
 	width: 84%;
 	top: 3.74%;
 	bottom: 2%;
 	left: 8%;
-	background-color: #ff4c4c;
 	padding: 5%;
-	animation-name: growJoin;
 	animation-duration: 1s;
 	position: fixed;
 	z-index: 1;
@@ -89,20 +38,16 @@
 	align-items: center;
 }
 
-#joinCardBig > div > * , #joinCardBig > *{
+.Big > div > * , .Big > *{
 	font-size: 50px;
 	color: #3A3942;
 	border-color: #3A3942;
 }
 
-#joinCardBig > .icon {
+.Big > .icon {
 	position: absolute;
 	left: 7%;
 	top: 7%;
-}
-
-#joinCardBig > div > label {
-	top: -25px;
 }
 
 #logoutCard {
@@ -140,6 +85,15 @@
 .titleSpan {
 	font-size: 48px;
 }
+
+input::-webkit-input-placeholder { color:transparent; }
+input:-moz-placeholder { color:transparent; } /* FF 4-18 */
+input::-moz-placeholder { color:transparent; } /* FF 19+ */
+input:-ms-input-placeholder { color:transparent; } /* IE 10+ */
+input:focus::-webkit-input-placeholder { color:#3A3942; }
+input:focus:-moz-placeholder { color:#3A3942; } /* FF 4-18 */
+input:focus::-moz-placeholder { color:#3A3942; } /* FF 19+ */
+input:focus:-ms-input-placeholder { color:#3A3942; } /* IE 10+ */
 
 /*Mobile only*/
 @media (max-width: 600px) {
