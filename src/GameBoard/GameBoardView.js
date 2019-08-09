@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './GameBoardView.css';
 
-var SETEXISTS = "A set exists! Keep searching!";
+let SETEXISTS = "A set exists! Keep searching!";
+let INSTLINK = "https://www.setgame.com/sites/default/files/instructions/SET%20INSTRUCTIONS%20-%20ENGLISH.pdf";
 
 export default class GameBoardView extends Component {
   constructor(props) {
@@ -63,7 +64,8 @@ export default class GameBoardView extends Component {
           </div>
           <div className="bottomPane">
             <span className="rightPane">GameId:&nbsp;{this.props.gameId}</span><br />
-            <span className="rightPane">{this.state.message}</span>
+            <span className="rightPane">{this.state.message}</span><br />
+            <span className="rightPane"><a href={INSTLINK}>Instructions</a></span>
           </div>
         </div>
       </div>
