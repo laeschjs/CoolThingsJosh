@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import './SignInUp.css';
 
 export default class SignInUp extends Component {
@@ -152,10 +151,11 @@ export default class SignInUp extends Component {
   }
 
   submitted = (e) => {
+    const auth = getAuth(this.props.firebaseApp);
     if (this.state.formState === "up") {
-      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(function(){
+      createUserWithEmailAndPassword(auth, this.state.email, this.state.password).then(function(userCredential){
         console.log("Successful Sign Up");
-        var userId = firebase.auth().currentUser.uid + "";
+        var userId = userCredential.user.uid + "";
         this.props.db.collection("users").doc(userId).set({
           name: this.state.name,
           currentGame: "",
@@ -175,7 +175,7 @@ export default class SignInUp extends Component {
         });
       }.bind(this));
     } else {
-      firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error){
+      signInWithEmailAndPassword(auth, this.state.email, this.state.password).catch(function(error){
         console.log("Error with Sign In:");
         console.log(error.message);
         this.setState({

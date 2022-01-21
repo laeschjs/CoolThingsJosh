@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import { getAuth, signOut } from 'firebase/auth';
 import './Dashboard.css';
 import './NewGame.css';
 import './JoinGame.css';
@@ -102,7 +101,7 @@ export default class Dashboard extends Component {
   }
 
   logout = () => {
-    firebase.auth().signOut().then(function() {
+    signOut(getAuth(this.props.firebaseApp)).then(function() {
       console.log("successful sign out");
     }).catch(function(error) {
       console.log("There was an error signing out:");

@@ -3,8 +3,7 @@ import SignInUp from '../SignInUp/SignInUp';
 import Dashboard from '../Dashboard/Dashboard';
 import TitleScreen from '../TitleScreen/TitleScreen';
 import GameBoard from '../GameBoard/GameBoard';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export default class SetGame extends Component {
   constructor() {
@@ -16,7 +15,8 @@ export default class SetGame extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(function(user) {
+    const auth = getAuth(this.props.firebaseApp);
+    onAuthStateChanged(auth, function(user) {
       if (user) {
         // User is signed in.
         var userRef = this.props.db.doc("users/" + user.uid);
@@ -38,9 +38,10 @@ export default class SetGame extends Component {
     var rendered = <TitleScreen message="Loading" />;
     if (this.state.toRender === "Dashboard") {
       rendered = <Dashboard changeView={this.changeToRender} db={this.props.db}
-                            gameId={this.state.gameId} setGameId={this.setGameId} />;
+                            gameId={this.state.gameId} setGameId={this.setGameId}
+                            firebaseApp={this.props.firebaseApp} />;
     } else if (this.state.toRender === "SignInUp") {
-      rendered = <SignInUp db={this.props.db} />;
+      rendered = <SignInUp db={this.props.db} firebaseApp={this.props.firebaseApp} />;
     } else if (this.state.toRender === "GameBoard") {
       rendered = <GameBoard db={this.props.db} uid={this.state.uid} 
                       changeView={function() { return this.changeToRender("Dashboard")}.bind(this)} />;
