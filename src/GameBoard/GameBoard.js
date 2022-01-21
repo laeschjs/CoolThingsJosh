@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import firebase from 'firebase/app';
-import 'firebase/storage';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/storage';
 import GameBoardView from './GameBoardView';
 import { checkForSet } from '../Utilities';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import SetGame from './SetGame/SetGame';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 import * as serviceWorker from './serviceWorker';
 
 var showSet = true;

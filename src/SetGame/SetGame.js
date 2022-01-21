@@ -3,8 +3,8 @@ import SignInUp from '../SignInUp/SignInUp';
 import Dashboard from '../Dashboard/Dashboard';
 import TitleScreen from '../TitleScreen/TitleScreen';
 import GameBoard from '../GameBoard/GameBoard';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 
 export default class SetGame extends Component {
   constructor() {
