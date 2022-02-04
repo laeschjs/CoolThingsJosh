@@ -14,6 +14,12 @@ In order for the Firebase CLI to work, you need to have a `config.js` in the src
 First will build the app and output it to the build folder.<br>
 Then will run firebase serve for you to test the changes locally at [http://localhost:5000](http://localhost:5000) while still being connected to firebase.
 
+### `npm run deploy`
+
+First will build the app and output it to the build folder.<br>
+Then will run firebase deploy to deploy the build folder to the firebase project.<br>
+<b>Hosting URL:</b> [https://coolthingsjosh.web.app](https://coolthingsjosh.web.app)
+
 ## Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/laeschjs/CoolThingsJosh/tree/master/create_react_app/).
