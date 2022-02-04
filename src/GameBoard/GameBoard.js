@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
+import { doc, getDoc, getFirestore, increment, onSnapshot, updateDoc } from 'firebase/firestore';
 import GameBoardView from './GameBoardView';
 import { checkForSet } from '../Utilities';
 
@@ -10,18 +11,20 @@ export default class GameBoard extends Component {
     this.state = {
       deck: [], selected: [], board: [],
       nextCard: null, state: "", urls: [],
-      gameRef: undefined, gameId: undefined,
-      userRef: undefined, manualId: undefined
+      gameId: undefined, manualId: undefined
     }
   }
 
-  componentDidMount() {
-    var userRef = this.props.db.doc("users/" + this.props.uid);
-    userRef.get().then(function(userDoc) {
-      var gameId = userDoc.get("currentGame");
-      var gameRef = this.props.db.doc("games/" + gameId);
-      gameRef.get().then(function(gameDoc){
-        var gameData = gameDoc.data();
+  async componentDidMount() {
+    const db = getFirestore(this.props.firebaseApp);
+    const userDoc = await getDoc(doc(db, 'users', this.props.uid));
+    if (userDoc.exists()) {
+      const gameId = userDoc.data().currentGame;
+      const gameRef = doc(db, 'games', gameId);
+      const gameDoc = await getDoc(gameRef);
+      if (gameDoc.exists()) {
+        const gameData = gameDoc.data();
+        const removeListener = onSnapshot(gameRef, this.gameListener);
         this.setState({
           deck: gameData.deck,
           board: gameData.board,
@@ -29,16 +32,11 @@ export default class GameBoard extends Component {
           state: gameData.state,
           gameId: gameId,
           manualId: gameData.manualId,
-          name: userDoc.data().name
+          name: userDoc.data().name,
+          removeListener
         });
-      }.bind(this));
-      var removeListener = gameRef.onSnapshot(this.gameListener);
-      this.setState({
-        removeListener: removeListener,
-        gameRef: gameRef,
-        userRef: userRef
-      });
-    }.bind(this));
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -116,9 +114,11 @@ export default class GameBoard extends Component {
     var endIndex = board.length;
     var sel = this.state.selected; // Just to not always type this.state.selected
     if (checkForSet(board[sel[0]], board[sel[1]], board[sel[2]])) {
+      const db = getFirestore(this.props.firebaseApp);
+      const userRef = doc(db, 'users', this.props.uid);
+      updateDoc(userRef, { numSets: increment(1) });
       if (board.length <= 12) {
         this.add3Cards(sel[0], sel[1], sel[2], "found a set!");
-        this.state.userRef.update({numSets: firebase.firestore.FieldValue.increment(1)});
       } else {
         sel.sort(function(a, b) { return b - 0 - (a - 0)});
         for (var i = 0; i < 3; i++) {
@@ -131,12 +131,11 @@ export default class GameBoard extends Component {
             board.splice(sel[i],1);
           }
         }
-        var newBoard = {
+        const gameRef = doc(db, 'games', this.state.gameId);
+        updateDoc(gameRef, {
           board: board,
           state: this.state.name + " found a set!"
-        }
-        this.state.gameRef.update(newBoard);
-        this.state.userRef.update({numSets: firebase.firestore.FieldValue.increment(1)});
+        });
       }
     } else {
       this.setState({state: "Look closer because that isn't a Set"});
@@ -157,7 +156,9 @@ export default class GameBoard extends Component {
     // No set found so add 3 more cards if available
     if (this.state.nextCard >= 81) {
       console.log("The game has ended");
-      this.state.gameRef.update({state: "Game Over"});
+      const db = getFirestore(this.props.firebaseApp);
+      const gameRef = doc(db, 'games', this.state.gameId);
+      updateDoc(gameRef, { state: "Game Over" });
       return false;
     }
 
@@ -178,18 +179,20 @@ export default class GameBoard extends Component {
       board.splice(index2,1);
       board.splice(index1,1);
     }
-    var newBoard = {
+
+    const db = getFirestore(this.props.firebaseApp);
+    const gameRef = doc(db, 'games', this.state.gameId);
+    updateDoc(gameRef, {
       board: board,
-      nextCard: firebase.firestore.FieldValue.increment(3),
+      nextCard: increment(3),
       state: this.state.name + " " + message
-    }
-    this.state.gameRef.update(newBoard);
+    });
   }
 
-  gameListener = (gameSnapshot) => {
-    var newBoard = gameSnapshot.get("board");
-    var nextCard = gameSnapshot.get("nextCard");
-    var state = gameSnapshot.get("state");
+  gameListener = async (gameSnapshot) => {
+    var newBoard = gameSnapshot.data().board;
+    var nextCard = gameSnapshot.data().nextCard;
+    var state = gameSnapshot.data().state;
     // Check if there was actually an update
     if (newBoard.toString() === this.state.board.toString() &&
         state === this.state.state) {
@@ -208,14 +211,14 @@ export default class GameBoard extends Component {
     //   }
     // }
     if (state === "Game Over") {
-      this.state.userRef.get().then(function(userDoc) {
-        this.setState({
-          board: newBoard,
-          nextCard: nextCard,
-          selected: [],
-          state: "Game Over. You found " + userDoc.get("numSets") + " sets"
-        })
-      }.bind(this));
+      const db = getFirestore(this.props.firebaseApp);
+      const userDoc = await getDoc(doc(db, 'users', this.props.uid));
+      this.setState({
+        board: newBoard,
+        nextCard: nextCard,
+        selected: [],
+        state: "Game Over. You found " + userDoc.data().numSets + " sets"
+      });
     } else {
       this.setState({
         board: newBoard,

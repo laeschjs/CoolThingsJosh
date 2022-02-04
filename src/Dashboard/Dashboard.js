@@ -4,6 +4,7 @@ import './Dashboard.css';
 import './NewGame.css';
 import './JoinGame.css';
 import { makeDeck } from '../Utilities';
+import { collection, getDocs, getFirestore, query, addDoc, where } from 'firebase/firestore';
 
 export default class Dashboard extends Component {
   constructor() {
@@ -16,14 +17,14 @@ export default class Dashboard extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     var joinId = this.state.joinGameId;
     if ((joinId !== "") && (prevState.joinGameId !== joinId)) {
-      this.props.db.collection("games/").where("manualId", "==", joinId).get().then(function(querySnapshot){
-        querySnapshot.forEach(function(queryDocSnapshot) {
-          this.props.setGameId(queryDocSnapshot.id);
-        }, this);
-      }.bind(this));
+      const db = getFirestore(this.props.firebaseApp);
+      const gamesCollection = collection(db, 'games');
+      const gamesQuery = query(gamesCollection, where('manualId', '==', joinId));
+      const querySnapshot = await getDocs(gamesQuery);
+      querySnapshot.forEach((doc) => this.props.setGameId(doc.id));
     }
 
     var newGameId = this.state.newGameId;
@@ -109,23 +110,20 @@ export default class Dashboard extends Component {
     })
   }
 
-  newGame = (manualId) => {
+  newGame = async (manualId) => {
     var deck = makeDeck();
     var boardArr = deck.slice(0,12);
-    this.props.db.collection("games").add({
-      state: "",
+    const db = getFirestore(this.props.firebaseApp);
+    const gamesCollection = collection(db, 'games');
+    const docRef = await addDoc(gamesCollection, {
+      state: '',
       queue: [],
       board: boardArr,
       deck: deck,
       nextCard: 12,
       manualId: manualId
-    })
-    .then(function(docRef) {
-      this.props.setGameId(docRef.id);
-    }.bind(this))
-    .catch(function(error) {
-      console.log("Error adding document: ", error);
     });
+    this.props.setGameId(docRef.id);
   }
 
   resume = () => {
