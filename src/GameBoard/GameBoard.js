@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/storage';
 import { doc, getDoc, getFirestore, increment, onSnapshot, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import GameBoardView from './GameBoardView';
 import { checkForSet } from '../Utilities';
 
@@ -82,15 +81,12 @@ export default class GameBoard extends Component {
     return <GameBoardView {...passedProps} />
   }
 
-  getImage = (index) => {
-    firebase.storage().ref().child(this.state.board[index]+".png").getDownloadURL().then(function(url){
-      var state = {};
-      state.urls = this.state.urls.slice();
-      state.urls[index] = url;
-      this.setState(state);
-    }.bind(this)).catch(function(error){
-      console.log(error);
-    });
+  getImage = async (index) => {
+    const pathRef = ref(getStorage(), this.state.board[index] + '.png');
+    const url = await getDownloadURL(pathRef);
+    const urls = this.state.urls.slice();
+    urls[index] = url;
+    this.setState({ urls });
   }
 
   imgSelected = (boardIndex) => {
