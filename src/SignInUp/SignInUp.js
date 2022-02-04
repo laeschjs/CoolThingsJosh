@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getFirestore, setDoc } from 'firebase/firestore';
 import './SignInUp.css';
 
 export default class SignInUp extends Component {
@@ -152,20 +152,17 @@ export default class SignInUp extends Component {
   }
 
   submitted = (e) => {
+    const auth = getAuth(this.props.firebaseApp);
     if (this.state.formState === "up") {
-      firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then(function(){
+      createUserWithEmailAndPassword(auth, this.state.email, this.state.password).then(function(userCredential){
         console.log("Successful Sign Up");
-        var userId = firebase.auth().currentUser.uid + "";
-        this.props.db.collection("users").doc(userId).set({
+        var userId = userCredential.user.uid + "";
+        const db = getFirestore(this.props.firebaseApp);
+        setDoc(doc(db, 'users', userId), {
           name: this.state.name,
           currentGame: "",
           numSets: 0
-        }).then(function() {
-          console.log("User Doc successfully created!");
-        }).catch(function(error) {
-          console.log("Error creating document:");
-          console.log(error.message);
-        });
+        })
       }.bind(this)).catch(function(error) {
         console.log("Error with Sign Up:");
         console.log(error.message);
@@ -175,7 +172,7 @@ export default class SignInUp extends Component {
         });
       }.bind(this));
     } else {
-      firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error){
+      signInWithEmailAndPassword(auth, this.state.email, this.state.password).catch(function(error){
         console.log("Error with Sign In:");
         console.log(error.message);
         this.setState({

@@ -1,40 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import SetGame from './SetGame/SetGame';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
 import * as serviceWorker from './serviceWorker';
 
-var showSet = true;
-try {
-  var getConfig = require('./config.js');
-} catch(err) {
-  console.log(err);
-  showSet = false;
-}
+// Won't exist for people who clone
+import { firebaseSecret } from './config';
 
-var dom = (
-  <div>
-    <h1>
-      You don't have the necessary config file to run this application.
-      Sorry I didn't want to give you full read/write access to my firebase
-      project :p
-    </h1>
-  </div>
-);
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseSecret);
 
-if (showSet) {
-  var config = getConfig.default();
-
-  // Initialize Firebase
-  firebase.initializeApp(config);
-  var db = firebase.firestore();
-  db.settings({});
-
-  dom = <SetGame db={db} />;
-}
-
-ReactDOM.render(dom, document.getElementById('root'));
+ReactDOM.render(<SetGame firebaseApp={firebaseApp} />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

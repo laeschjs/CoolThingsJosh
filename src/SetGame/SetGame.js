@@ -3,8 +3,8 @@ import SignInUp from '../SignInUp/SignInUp';
 import Dashboard from '../Dashboard/Dashboard';
 import TitleScreen from '../TitleScreen/TitleScreen';
 import GameBoard from '../GameBoard/GameBoard';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc, getFirestore, updateDoc } from 'firebase/firestore';
 
 export default class SetGame extends Component {
   constructor() {
@@ -16,17 +16,21 @@ export default class SetGame extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(function(user) {
+    const auth = getAuth(this.props.firebaseApp);
+    onAuthStateChanged(auth, async function(user) {
       if (user) {
         // User is signed in.
-        var userRef = this.props.db.doc("users/" + user.uid);
-        userRef.get().then(function(userDoc) {
-          this.setState({
-            toRender: "Dashboard",
-            uid: user.uid,
-            gameId: userDoc.data().currentGame
-          });
-        }.bind(this));
+        const db = getFirestore(this.props.firebaseApp);
+        const userRef = doc(db, 'users', user.uid);
+        const userDoc = await getDoc(userRef);
+        let gameId = '';
+        if (userDoc.exists()) gameId = userDoc.data().currentGame;
+
+        this.setState({
+          toRender: "Dashboard",
+          uid: user.uid,
+          gameId
+        });
       } else {
         // No user is signed in.
         this.setState({toRender: "SignInUp"});
@@ -35,24 +39,36 @@ export default class SetGame extends Component {
   }
 
   render() {
-    var rendered = <TitleScreen message="Loading" />;
     if (this.state.toRender === "Dashboard") {
-      rendered = <Dashboard changeView={this.changeToRender} db={this.props.db}
-                            gameId={this.state.gameId} setGameId={this.setGameId} />;
+      return (
+        <Dashboard
+          changeView={this.changeToRender}
+          gameId={this.state.gameId}
+          setGameId={this.setGameId}
+          firebaseApp={this.props.firebaseApp}
+        />
+      );
     } else if (this.state.toRender === "SignInUp") {
-      rendered = <SignInUp db={this.props.db} />;
+      return <SignInUp firebaseApp={this.props.firebaseApp} />;
     } else if (this.state.toRender === "GameBoard") {
-      rendered = <GameBoard db={this.props.db} uid={this.state.uid} 
-                      changeView={function() { return this.changeToRender("Dashboard")}.bind(this)} />;
+      return (
+        <GameBoard
+          uid={this.state.uid}
+          firebaseApp={this.props.firebaseApp}
+          changeView={function() { return this.changeToRender("Dashboard")}.bind(this)}
+        />
+      );
     }
-    return rendered;
+    return <TitleScreen message="Loading" />;
   }
 
   setGameId = (newId) => {
     var obj = {};
     obj.gameId = newId;
     obj.toRender = "GameBoard";
-    this.props.db.doc("users/" + this.state.uid).update({
+    const db = getFirestore(this.props.firebaseApp);
+    const userRef = doc(db, 'users', this.state.uid);
+    updateDoc(userRef, {
       currentGame: newId,
       numSets: 0
     });
