@@ -55,7 +55,7 @@ export default class SetGame extends Component {
         <GameBoard
           uid={this.state.uid}
           firebaseApp={this.props.firebaseApp}
-          changeView={function() { return this.changeToRender("Dashboard")}.bind(this)}
+          changeView={this.changeToRender}
         />
       );
     }
