@@ -59,7 +59,7 @@ export default class GameBoardView extends Component {
         <div style={{height: "25%"}} className="center-align">
           <div className="bottomPane">
             {submitButton}<br />
-            <div className="button" id="back" onClick={this.props.changeView}>Back to Dashboard</div><br />
+            <div className="button" id="back" onClick={() => this.props.changeView('Dashboard')}>Back to Dashboard</div><br />
             <div className="button" id="check" disabled={this.state.message === "Game Over"} onClick={this.checkSet}>I don't think a Set exists</div>
           </div>
           <div className="bottomPane">
